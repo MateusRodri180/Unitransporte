@@ -1,0 +1,64 @@
+@page
+@model UnitransporteWeb.Pages.VeiculosModel
+@{
+    Layout = "_AppLayout";
+    ViewData["Title"] = "Veículos";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Veículos</h1>
+        <p>Frota cadastrada para coletas e entregas.</p>
+    </div>
+</div>
+
+<div class="card">
+    <h3 class="section-title">Novo veículo</h3>
+    <form method="post" class="form-grid">
+        <div class="field">
+            <label for="marca">Marca</label>
+            <input id="marca" name="Marca" value="@Model.Marca" placeholder="ex: Fiat" />
+        </div>
+        <div class="field">
+            <label for="modelo">Modelo</label>
+            <input id="modelo" name="Modelo" value="@Model.Modelo" placeholder="ex: Fiorino" />
+        </div>
+        <div class="field">
+            <label for="placa">Placa</label>
+            <input id="placa" name="Placa" value="@Model.Placa" placeholder="ex: ABC-1D23" />
+        </div>
+        <div class="field">
+            <label for="cor">Cor</label>
+            <input id="cor" name="Cor" value="@Model.Cor" placeholder="ex: Branco" />
+        </div>
+        <div class="field" style="justify-content:flex-end">
+            <button class="btn btn-primary" type="submit">Cadastrar veículo</button>
+        </div>
+    </form>
+    @if (!string.IsNullOrEmpty(Model.Erro))
+    {
+        <p class="field-error" style="margin-top:10px">@Model.Erro</p>
+    }
+</div>
+
+<div class="card" style="padding:0">
+    <table>
+        <thead>
+            <tr>
+                <th>Marca / Modelo</th>
+                <th>Placa</th>
+                <th>Cor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var v in Model.Store.Veiculos)
+            {
+                <tr>
+                    <td>@v.Marca @v.Modelo</td>
+                    <td class="mono">@v.Placa</td>
+                    <td>@v.Cor</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

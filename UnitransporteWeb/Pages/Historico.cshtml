@@ -1,0 +1,56 @@
+@page
+@model UnitransporteWeb.Pages.HistoricoModel
+@{
+    Layout = "_AppLayout";
+    ViewData["Title"] = "Histórico";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Histórico de movimentações</h1>
+        <p>Entregas concluídas e cancelamentos já registrados no sistema.</p>
+    </div>
+</div>
+
+@if (Model.Concluidas.Count == 0)
+{
+    <div class="card empty-state">
+        <h3>Nada por aqui ainda</h3>
+        <p>Assim que uma encomenda for entregue ou cancelada, ela aparece neste histórico.</p>
+    </div>
+}
+else
+{
+    <div class="card" style="padding:0">
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Trajeto</th>
+                    <th>Status</th>
+                    <th>Minuta</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model.Concluidas)
+                {
+                    var minuta = Model.MinutaDe(e.Id);
+                    <tr>
+                        <td>
+                            <strong>@e.ClienteNome</strong>
+                            @if (!string.IsNullOrEmpty(e.MotivoCancelamento))
+                            {
+                                <div class="field-hint">@e.MotivoCancelamento</div>
+                            }
+                        </td>
+                        <td>@e.PontoDeColeta → @e.PontoDeDestino</td>
+                        <td>@await Html.PartialAsync("_StatusBadge", e.StatusDaEntrega)</td>
+                        <td class="mono">@(minuta is not null ? $"#{minuta.NumeroDaMinuta}" : "—")</td>
+                        <td class="field-hint">@((minuta?.Data ?? e.CriadaEm).ToString("dd/MM/yyyy"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

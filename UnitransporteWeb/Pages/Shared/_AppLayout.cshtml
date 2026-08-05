@@ -1,0 +1,46 @@
+@{
+    Layout = "_Layout";
+    var usuario = ViewData["CurrentUser"] as UnitransporteWeb.Models.Usuario;
+    var ativo = ViewData["ActivePage"] as string ?? "";
+    var isAdmin = usuario?.Cargo == UnitransporteWeb.Models.Cargo.Administrador;
+}
+<div class="app-shell">
+    <aside class="app-sidebar">
+        <a class="app-brand" href="/">
+            <span class="app-brand-mark">UT</span>
+            <div>
+                <strong>Unitransporte</strong>
+                <span>Gestão logística</span>
+            </div>
+        </a>
+        <nav class="app-nav">
+            @if (isAdmin)
+            {
+                <a class="app-nav-link @(ativo == "entregas" ? "is-active" : "")" href="/Entregas">Entregas e coletas</a>
+                <a class="app-nav-link @(ativo == "nova" ? "is-active" : "")" href="/EncomendaNova">Nova encomenda</a>
+                <a class="app-nav-link @(ativo == "historico" ? "is-active" : "")" href="/Historico">Histórico</a>
+                <a class="app-nav-link @(ativo == "usuarios" ? "is-active" : "")" href="/Usuarios">Usuários</a>
+                <a class="app-nav-link @(ativo == "veiculos" ? "is-active" : "")" href="/Veiculos">Veículos</a>
+            }
+            else
+            {
+                <a class="app-nav-link @(ativo == "motorista" ? "is-active" : "")" href="/Motorista">Minhas encomendas</a>
+            }
+        </nav>
+    </aside>
+    <div class="app-main">
+        <header class="app-topbar">
+            <div class="app-topbar-user">
+                <span class="app-topbar-name">@usuario?.NomeDaPessoa</span>
+                <span class="app-role-badge @(isAdmin ? "is-admin" : "is-motorista")">@usuario?.Cargo</span>
+            </div>
+            <form method="post" asp-page="/Login" asp-page-handler="Logout">
+                <button class="btn btn-ghost" type="submit">Sair</button>
+            </form>
+        </header>
+        <main class="app-content">
+            @RenderBody()
+        </main>
+    </div>
+</div>
+@await RenderSectionAsync("Scripts", required: false)

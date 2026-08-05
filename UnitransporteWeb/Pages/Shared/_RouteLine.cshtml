@@ -1,0 +1,15 @@
+@model UnitransporteWeb.Models.RouteLineViewModel
+
+<div class="route-line @(Model.Cancelada ? "route-line-cancelada" : "")">
+    <div class="route-line-track">
+        <span class="route-line-point"></span>
+        <div class="route-line-dashes">
+            <div class="route-line-fill" style="width:@(Model.Progresso)%"></div>
+        </div>
+        <span class="route-line-point route-line-point-end"></span>
+    </div>
+    <div class="route-line-labels">
+        <span title="@Model.Origem">@Model.Origem</span>
+        <span title="@Model.Destino">@Model.Destino</span>
+    </div>
+</div>

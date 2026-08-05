@@ -1,0 +1,85 @@
+@page
+@model UnitransporteWeb.Pages.EntregasModel
+@{
+    Layout = "_AppLayout";
+    ViewData["Title"] = "Entregas e coletas";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Entregas e coletas pendentes</h1>
+        <p>Acompanhe tudo o que ainda está em aberto na operação.</p>
+    </div>
+</div>
+
+<div class="stat-row">
+    <div class="stat-card">
+        <div class="stat-value">@Model.AguardandoColeta</div>
+        <div class="stat-label">Aguardando coleta</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">@Model.ACaminho</div>
+        <div class="stat-label">A caminho da entrega</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">@Model.MotoristasAtivos</div>
+        <div class="stat-label">Motoristas ativos</div>
+    </div>
+</div>
+
+@if (Model.Pendentes.Count == 0)
+{
+    <div class="card empty-state">
+        <h3>Nenhuma pendência agora</h3>
+        <p>Todas as encomendas cadastradas já foram entregues ou canceladas.</p>
+    </div>
+}
+else
+{
+    <div class="card" style="padding:0">
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Trajeto</th>
+                    <th>Motorista</th>
+                    <th>Frete</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model.Pendentes)
+                {
+                    <tr>
+                        <td>
+                            <strong>@e.ClienteNome</strong>
+                            <div class="field-hint">@e.ClienteTelefone</div>
+                        </td>
+                        <td>
+                            @await Html.PartialAsync("_RouteLine", new UnitransporteWeb.Models.RouteLineViewModel(e.PontoDeColeta, e.PontoDeDestino, e.StatusDaEntrega))
+                        </td>
+                        <td>@Model.NomeMotorista(e.MotoristaId)</td>
+                        <td class="mono">R$ @e.ValorDoFrete.ToString("0.00")</td>
+                        <td>@await Html.PartialAsync("_StatusBadge", e.StatusDaEntrega)</td>
+                        <td>
+                            @if (Model.CancelandoId == e.Id)
+                            {
+                                <form method="post" asp-page-handler="Cancelar" class="cancel-inline">
+                                    <input type="hidden" name="CancelarId" value="@e.Id" />
+                                    <input class="cancel-inline-input" name="Motivo" placeholder="Motivo do cancelamento" required />
+                                    <button class="btn btn-danger btn-sm" type="submit">Confirmar</button>
+                                    <a class="btn btn-ghost btn-sm" href="/Entregas">Voltar</a>
+                                </form>
+                            }
+                            else
+                            {
+                                <a class="btn btn-ghost btn-sm" href="/Entregas?handler=Cancelar&id=@e.Id">Cancelar</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

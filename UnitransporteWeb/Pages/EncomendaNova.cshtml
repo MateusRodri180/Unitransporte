@@ -1,0 +1,110 @@
+@page
+@model UnitransporteWeb.Pages.EncomendaNovaModel
+@{
+    Layout = "_AppLayout";
+    ViewData["Title"] = "Nova encomenda";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Nova encomenda</h1>
+        <p>Cadastre a solicitação do cliente e já designe motorista e veículo.</p>
+    </div>
+</div>
+
+<div class="card">
+    <form method="post" class="form-grid" id="form-encomenda">
+        <div class="field">
+            <label for="clienteNome">Cliente</label>
+            <input id="clienteNome" name="ClienteNome" value="@Model.ClienteNome" placeholder="Nome do cliente ou loja" />
+        </div>
+        <div class="field">
+            <label for="clienteTelefone">Telefone</label>
+            <input id="clienteTelefone" name="ClienteTelefone" value="@Model.ClienteTelefone" placeholder="(17) 99xxx-xxxx" />
+        </div>
+        <div class="field">
+            <label for="pontoDeColeta">Ponto de coleta</label>
+            <input id="pontoDeColeta" name="PontoDeColeta" value="@Model.PontoDeColeta" placeholder="Endereço ou bairro de coleta" />
+        </div>
+        <div class="field">
+            <label for="pontoDeDestino">Ponto de destino</label>
+            <input id="pontoDeDestino" name="PontoDeDestino" value="@Model.PontoDeDestino" placeholder="Endereço ou bairro de destino" />
+        </div>
+        <div class="field">
+            <label for="dimensoes">Dimensões (AxLxP cm)</label>
+            <input id="dimensoes" name="Dimensoes" value="@Model.Dimensoes" placeholder="ex: 40x30x20cm" />
+        </div>
+        <div class="field">
+            <label for="peso">Peso (kg)</label>
+            <input id="peso" name="Peso" value="@Model.Peso" placeholder="ex: 3.5" inputmode="decimal" />
+        </div>
+        <div class="field">
+            <label for="motoristaId">Motorista</label>
+            <select id="motoristaId" name="MotoristaId">
+                <option value="">A definir depois</option>
+                @foreach (var m in Model.Motoristas)
+                {
+                    <option value="@m.Id" selected="@(Model.MotoristaId == m.Id)">@m.NomeDaPessoa</option>
+                }
+            </select>
+        </div>
+        <div class="field">
+            <label for="veiculoId">Veículo</label>
+            <select id="veiculoId" name="VeiculoId">
+                <option value="">A definir depois</option>
+                @foreach (var v in Model.Store.Veiculos)
+                {
+                    <option value="@v.Id" selected="@(Model.VeiculoId == v.Id)">@v.Marca @v.Modelo — @v.Placa</option>
+                }
+            </select>
+        </div>
+        <div class="field" style="grid-column:1 / -1">
+            <label for="observacoes">Observações</label>
+            <textarea id="observacoes" name="Observacoes" rows="2" placeholder="Detalhes para o motorista, se houver">@Model.Observacoes</textarea>
+        </div>
+
+        <div class="field" style="grid-column:1 / -1">
+            <div class="frete-preview">
+                <span class="field-hint">Frete calculado automaticamente</span>
+                <span class="frete-preview-value mono" id="frete-valor">R$ 0.00</span>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Erro))
+        {
+            <p class="field-error">@Model.Erro</p>
+        }
+        @if (Model.Sucesso)
+        {
+            <p class="field-hint" style="color:var(--cargo-green)">Encomenda cadastrada com sucesso.</p>
+        }
+
+        <div class="field" style="flex-direction:row;gap:8px;grid-column:1 / -1">
+            <button class="btn btn-primary" type="submit">Cadastrar encomenda</button>
+            <a class="btn btn-ghost" href="/Entregas">Ver pendências</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const pesoInput = document.getElementById('peso');
+        const dimInput = document.getElementById('dimensoes');
+        const freteValor = document.getElementById('frete-valor');
+
+        async function atualizarFrete() {
+            const params = new URLSearchParams({ peso: pesoInput.value, dimensoes: dimInput.value });
+            try {
+                const resp = await fetch(`/EncomendaNova?handler=CalcularFrete&${params.toString()}`);
+                if (!resp.ok) return;
+                const data = await resp.json();
+                freteValor.textContent = `R$ ${data.frete}`;
+            } catch (e) {
+                // silencioso: se falhar, mantém o último valor calculado
+            }
+        }
+
+        pesoInput.addEventListener('input', atualizarFrete);
+        dimInput.addEventListener('input', atualizarFrete);
+    </script>
+}

@@ -1,0 +1,11 @@
+@model UnitransporteWeb.Models.StatusEncomenda
+@{
+    var (label, css) = Model switch
+    {
+        UnitransporteWeb.Models.StatusEncomenda.Pendente => ("Pendente", "status-pendente"),
+        UnitransporteWeb.Models.StatusEncomenda.Coletada => ("Coletada", "status-coletada"),
+        UnitransporteWeb.Models.StatusEncomenda.Entregue => ("Entregue", "status-entregue"),
+        _ => ("Cancelada", "status-cancelada"),
+    };
+}
+<span class="status-badge @css">@label</span>

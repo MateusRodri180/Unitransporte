@@ -1,0 +1,142 @@
+@page
+@model UnitransporteWeb.Pages.MotoristaModel
+@{
+    Layout = "_AppLayout";
+    ViewData["Title"] = "Minhas encomendas";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Minhas encomendas</h1>
+        <p>Atualize o status conforme for coletando e entregando os pedidos do dia.</p>
+    </div>
+</div>
+
+@if (Model.MinhasEncomendas.Count == 0)
+{
+    <div class="card empty-state">
+        <h3>Nenhuma encomenda atribuída</h3>
+        <p>Assim que o administrador designar uma coleta para você, ela aparece aqui.</p>
+    </div>
+}
+else
+{
+    <div class="motorista-grid">
+        @foreach (var e in Model.MinhasEncomendas)
+        {
+            <div class="card motorista-card">
+                <div class="motorista-card-header">
+                    <strong>@e.ClienteNome</strong>
+                    @await Html.PartialAsync("_StatusBadge", e.StatusDaEntrega)
+                </div>
+                @await Html.PartialAsync("_RouteLine", new UnitransporteWeb.Models.RouteLineViewModel(e.PontoDeColeta, e.PontoDeDestino, e.StatusDaEntrega))
+                @if (!string.IsNullOrEmpty(e.Observacoes))
+                {
+                    <p class="field-hint">@e.Observacoes</p>
+                }
+                <div class="motorista-card-meta">
+                    <span>@e.Dimensoes</span>
+                    <span>@e.Peso kg</span>
+                    <span class="mono">R$ @e.ValorDoFrete.ToString("0.00")</span>
+                </div>
+
+                @if (e.StatusDaEntrega == UnitransporteWeb.Models.StatusEncomenda.Pendente)
+                {
+                    <form method="post" asp-page-handler="Coletar">
+                        <input type="hidden" name="id" value="@e.Id" />
+                        <button class="btn btn-primary" type="submit">Marcar como coletada</button>
+                    </form>
+                }
+
+                @if (e.StatusDaEntrega == UnitransporteWeb.Models.StatusEncomenda.Coletada && Model.EntregandoId != e.Id)
+                {
+                    <a class="btn btn-primary" href="/Motorista?handler=Entregar&id=@e.Id">Confirmar entrega</a>
+                }
+
+                @if (e.StatusDaEntrega == UnitransporteWeb.Models.StatusEncomenda.Coletada && Model.EntregandoId == e.Id)
+                {
+                    <div class="motorista-entrega-form">
+                        <form method="post" asp-page-handler="FinalizarEntrega" class="motorista-assinatura-form">
+                            <input type="hidden" name="EncomendaId" value="@e.Id" />
+                            <div class="field">
+                                <label for="recebedor-@e.Id">Nome de quem recebeu</label>
+                                <input id="recebedor-@e.Id" name="NomeRecebedor" placeholder="Nome completo" required />
+                            </div>
+                            <div class="field">
+                                <label>Assinatura do recebedor</label>
+                                <div class="signature-pad">
+                                    <canvas class="signature-canvas" width="360" height="140"></canvas>
+                                    <span class="signature-pad-hint">Assine aqui com o dedo ou mouse</span>
+                                    <button type="button" class="btn btn-ghost btn-sm signature-limpar">Limpar assinatura</button>
+                                </div>
+                            </div>
+                            <div style="display:flex;gap:8px">
+                                <button class="btn btn-primary signature-submit" type="submit" disabled>Finalizar entrega</button>
+                                <a class="btn btn-ghost" href="/Motorista">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <style>
+        .signature-pad { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+        .signature-canvas { width: 100%; max-width: 360px; height: 140px; border: 1px dashed var(--border); border-radius: 8px; background: #fff; touch-action: none; cursor: crosshair; }
+        .signature-pad-hint { position: absolute; top: 60px; left: 16px; font-size: 12px; color: var(--text-muted); pointer-events: none; }
+    </style>
+    <script>
+        document.querySelectorAll('.motorista-assinatura-form').forEach((form) => {
+            const canvas = form.querySelector('.signature-canvas');
+            const hint = form.querySelector('.signature-pad-hint');
+            const limparBtn = form.querySelector('.signature-limpar');
+            const submitBtn = form.querySelector('.signature-submit');
+            const ctx = canvas.getContext('2d');
+            let desenhando = false;
+            let temAssinatura = false;
+
+            function pos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+            }
+
+            canvas.addEventListener('pointerdown', (e) => {
+                desenhando = true;
+                const { x, y } = pos(e);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            });
+
+            canvas.addEventListener('pointermove', (e) => {
+                if (!desenhando) return;
+                const { x, y } = pos(e);
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = '#1e2227';
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                if (!temAssinatura) {
+                    temAssinatura = true;
+                    hint.style.display = 'none';
+                    submitBtn.disabled = false;
+                }
+            });
+
+            function parar() { desenhando = false; }
+            canvas.addEventListener('pointerup', parar);
+            canvas.addEventListener('pointerleave', parar);
+
+            limparBtn.addEventListener('click', () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                temAssinatura = false;
+                hint.style.display = '';
+                submitBtn.disabled = true;
+            });
+        });
+    </script>
+}

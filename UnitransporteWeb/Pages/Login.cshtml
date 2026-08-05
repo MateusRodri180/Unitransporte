@@ -1,0 +1,59 @@
+@page
+@model UnitransporteWeb.Pages.LoginModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Entrar";
+}
+
+<div class="login-page">
+    <div class="login-visual">
+        <div class="login-visual-mark">UT</div>
+        <h1>Unitransporte</h1>
+        <p>Coleta e entrega rápida entre Votuporanga e região.</p>
+        <div class="login-route">
+            <span class="login-route-point"></span>
+            <span class="login-route-line"></span>
+            <span class="login-route-point login-route-point-end"></span>
+        </div>
+    </div>
+    <div class="login-form-wrap">
+        <form class="login-form" method="post">
+            <h2>Entrar no sistema</h2>
+            <p class="field-hint">Use seu usuário e senha cadastrados pelo administrador.</p>
+
+            <div class="field">
+                <label for="usuario">Usuário</label>
+                <input id="usuario" name="NomeDeUsuario" value="@Model.NomeDeUsuario" placeholder="ex: ezequias" autocomplete="username" />
+            </div>
+
+            <div class="field">
+                <label for="senha">Senha</label>
+                <input id="senha" name="Senha" type="password" placeholder="••••••••" autocomplete="current-password" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Erro))
+            {
+                <p class="field-error">@Model.Erro</p>
+            }
+
+            <button class="btn btn-primary" type="submit">Entrar</button>
+
+            <div class="login-demo">
+                <span>Acesso de demonstração (qualquer senha):</span>
+                <div class="login-demo-buttons">
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="preencher('ezequias')">Administrador</button>
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="preencher('carlos.a')">Motorista</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function preencher(usuario) {
+            document.getElementById('usuario').value = usuario;
+            document.getElementById('senha').value = 'demo123';
+        }
+    </script>
+}
