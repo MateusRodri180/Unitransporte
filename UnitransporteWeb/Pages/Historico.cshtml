@@ -21,36 +21,46 @@
 }
 else
 {
-    <div class="card" style="padding:0">
-        <table>
-            <thead>
-                <tr>
-                    <th>Cliente</th>
-                    <th>Trajeto</th>
-                    <th>Status</th>
-                    <th>Minuta</th>
-                    <th>Data</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var e in Model.Concluidas)
-                {
-                    var minuta = Model.MinutaDe(e.Id);
+    <div class="card card-table-wrapper">
+        <div class="table-responsive">
+            <table class="responsive-table">
+                <thead>
                     <tr>
-                        <td>
-                            <strong>@e.ClienteNome</strong>
-                            @if (!string.IsNullOrEmpty(e.MotivoCancelamento))
-                            {
-                                <div class="field-hint">@e.MotivoCancelamento</div>
-                            }
-                        </td>
-                        <td>@e.PontoDeColeta → @e.PontoDeDestino</td>
-                        <td>@await Html.PartialAsync("_StatusBadge", e.StatusDaEntrega)</td>
-                        <td class="mono">@(minuta is not null ? $"#{minuta.NumeroDaMinuta}" : "—")</td>
-                        <td class="field-hint">@((minuta?.Data ?? e.CriadaEm).ToString("dd/MM/yyyy"))</td>
+                        <th>Cliente</th>
+                        <th>Trajeto</th>
+                        <th>Status</th>
+                        <th>Minuta</th>
+                        <th>Data</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var e in Model.Concluidas)
+                    {
+                        var minuta = Model.MinutaDe(e.Id);
+                        <tr>
+                            <td data-label="Cliente">
+                                <strong>@e.ClienteNome</strong>
+                                @if (!string.IsNullOrEmpty(e.MotivoCancelamento))
+                                {
+                                    <div class="field-hint">@e.MotivoCancelamento</div>
+                                }
+                            </td>
+                            <td data-label="Trajeto">
+                                @e.PontoDeColeta → @e.PontoDeDestino
+                            </td>
+                            <td data-label="Status">
+                                @await Html.PartialAsync("_StatusBadge", e.StatusDaEntrega)
+                            </td>
+                            <td data-label="Minuta" class="mono">
+                                <span class="mobile-label">Minuta: </span>@(minuta is not null ? $"#{minuta.NumeroDaMinuta}" : "—")
+                            </td>
+                            <td data-label="Data" class="field-hint">
+                                <span class="mobile-label">Data: </span>@((minuta?.Data ?? e.CriadaEm).ToString("dd/MM/yyyy"))
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 }

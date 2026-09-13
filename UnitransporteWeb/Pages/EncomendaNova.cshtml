@@ -58,9 +58,10 @@
                 }
             </select>
         </div>
-        <div class="field" style="grid-column:1 / -1">
+
+        <div class="field field-observacoes">
             <label for="observacoes">Observações</label>
-            <textarea id="observacoes" name="Observacoes" rows="2" placeholder="Detalhes para o motorista, se houver">@Model.Observacoes</textarea>
+            <textarea id="observacoes" name="Observacoes" rows="2" placeholder="Detalhes para o motorista, se houver" style="resize: vertical">@Model.Observacoes</textarea>
         </div>
 
         <div class="field" style="grid-column:1 / -1">
@@ -100,7 +101,6 @@
                 const data = await resp.json();
                 freteValor.textContent = `R$ ${data.frete}`;
             } catch (e) {
-                // silencioso: se falhar, mantém o último valor calculado
             }
         }
 
