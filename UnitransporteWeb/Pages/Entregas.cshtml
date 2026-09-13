@@ -36,50 +36,60 @@
 }
 else
 {
-    <div class="card" style="padding:0">
-        <table>
-            <thead>
-                <tr>
-                    <th>Cliente</th>
-                    <th>Trajeto</th>
-                    <th>Motorista</th>
-                    <th>Frete</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var e in Model.Pendentes)
-                {
+    <div class="card card-table-wrapper">
+        <div class="table-responsive">
+            <table class="responsive-table">
+                <thead>
                     <tr>
-                        <td>
-                            <strong>@e.ClienteNome</strong>
-                            <div class="field-hint">@e.ClienteTelefone</div>
-                        </td>
-                        <td>
-                            @await Html.PartialAsync("_RouteLine", new UnitransporteWeb.Models.RouteLineViewModel(e.PontoDeColeta, e.PontoDeDestino, e.StatusDaEntrega))
-                        </td>
-                        <td>@Model.NomeMotorista(e.MotoristaId)</td>
-                        <td class="mono">R$ @e.ValorDoFrete.ToString("0.00")</td>
-                        <td>@await Html.PartialAsync("_StatusBadge", e.StatusDaEntrega)</td>
-                        <td>
-                            @if (Model.CancelandoId == e.Id)
-                            {
-                                <form method="post" asp-page-handler="Cancelar" class="cancel-inline">
-                                    <input type="hidden" name="CancelarId" value="@e.Id" />
-                                    <input class="cancel-inline-input" name="Motivo" placeholder="Motivo do cancelamento" required />
-                                    <button class="btn btn-danger btn-sm" type="submit">Confirmar</button>
-                                    <a class="btn btn-ghost btn-sm" href="/Entregas">Voltar</a>
-                                </form>
-                            }
-                            else
-                            {
-                                <a class="btn btn-ghost btn-sm" href="/Entregas?handler=Cancelar&id=@e.Id">Cancelar</a>
-                            }
-                        </td>
+                        <th>Cliente</th>
+                        <th>Trajeto</th>
+                        <th>Motorista</th>
+                        <th>Frete</th>
+                        <th>Status</th>
+                        <th class="text-right">Ações</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var e in Model.Pendentes)
+                    {
+                        <tr>
+                            <td data-label="Cliente">
+                                <strong>@e.ClienteNome</strong>
+                                <div class="field-hint">@e.ClienteTelefone</div>
+                            </td>
+                            <td data-label="Trajeto">
+                                @await Html.PartialAsync("_RouteLine", new UnitransporteWeb.Models.RouteLineViewModel(e.PontoDeColeta, e.PontoDeDestino, e.StatusDaEntrega))
+                            </td>
+                            <td data-label="Motorista">
+                                <span class="mobile-label">Motorista: </span>@Model.NomeMotorista(e.MotoristaId)
+                            </td>
+                            <td data-label="Frete" class="mono">
+                                <span class="mobile-label">Frete: </span>R$ @e.ValorDoFrete.ToString("0.00")
+                            </td>
+                            <td data-label="Status">
+                                @await Html.PartialAsync("_StatusBadge", e.StatusDaEntrega)
+                            </td>
+                            <td data-label="Ações" class="actions-cell">
+                                @if (Model.CancelandoId == e.Id)
+                                {
+                                    <form method="post" asp-page-handler="Cancelar" class="cancel-inline">
+                                        <input type="hidden" name="CancelarId" value="@e.Id" />
+                                        <input class="cancel-inline-input" name="Motivo" placeholder="Motivo do cancelamento" required />
+                                        <div class="cancel-inline-buttons">
+                                            <button class="btn btn-danger btn-sm" type="submit">Confirmar</button>
+                                            <a class="btn btn-ghost btn-sm" href="/Entregas">Voltar</a>
+                                        </div>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-ghost btn-sm btn-cancel-trigger" href="/Entregas?handler=Cancelar&id=@e.Id">Cancelar</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 }
