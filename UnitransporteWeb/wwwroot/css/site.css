@@ -1,240 +1,855 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 
 :root {
-  --asphalt: #14181c;
-  --amber: #f2a93b;
-  --amber-dark: #c9860f;
-  --cargo-green: #2f7b6b;
-  --cargo-green-bg: #e4f2ee;
-  --signal-red: #c1502e;
-  --signal-red-bg: #fbe9e3;
-  --slate-bg: #eef0f2;
-  --slate: #556070;
-  --bg: #faf9f6;
-  --card: #ffffff;
-  --border: #e4e1d9;
-  --text: #1e2227;
-  --text-muted: #6b7178;
-
-  --font-display: 'Barlow Condensed', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+    --asphalt: #14181c;
+    --amber: #f2a93b;
+    --amber-dark: #c9860f;
+    --cargo-green: #2f7b6b;
+    --cargo-green-bg: #e4f2ee;
+    --signal-red: #c1502e;
+    --signal-red-bg: #fbe9e3;
+    --slate-bg: #eef0f2;
+    --slate: #556070;
+    --bg: #faf9f6;
+    --card: #ffffff;
+    --border: #e4e1d9;
+    --text: #1e2227;
+    --text-muted: #6b7178;
+    --font-display: 'Barlow Condensed', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
 }
 
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
-html, body { height: 100%; margin: 0; }
+html, body {
+    height: 100%;
+    margin: 0;
+}
 
 body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    margin: 0;
 }
 
-a { color: inherit; }
+a {
+    color: inherit;
+}
 
-button, input, select, textarea { font-family: inherit; font-size: inherit; }
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
 
-:focus-visible { outline: 2px solid var(--amber-dark); outline-offset: 2px; }
+:focus-visible {
+    outline: 2px solid var(--amber-dark);
+    outline-offset: 2px;
+}
 
-/* ---- App shell (sidebar + topbar) ---- */
 
-.app-shell { display: flex; min-height: 100vh; }
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
 
 .app-sidebar {
-  width: 240px;
-  flex-shrink: 0;
-  background: var(--asphalt);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  padding: 24px 16px;
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--asphalt);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
 }
 
 .app-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 8px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
-  text-decoration: none;
-  color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #fff;
 }
 
 .app-brand-mark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 18px;
-  background: var(--amber);
-  color: var(--asphalt);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    background: var(--amber);
+    color: var(--asphalt);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.app-brand div { display: flex; flex-direction: column; line-height: 1.3; }
-.app-brand strong { font-family: var(--font-display); font-size: 18px; }
-.app-brand span { font-size: 12px; color: rgba(255, 255, 255, 0.55); }
+.app-brand div {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
 
-.app-nav { display: flex; flex-direction: column; gap: 4px; }
+.app-brand strong {
+    font-family: var(--font-display);
+    font-size: 18px;
+}
+
+.app-brand span {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.app-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
 .app-nav-link {
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.75);
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
 }
 
-.app-nav-link:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    .app-nav-link:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+    }
 
-.app-nav-link.is-active { background: var(--amber); color: var(--asphalt); font-weight: 600; }
+    .app-nav-link.is-active {
+        background: var(--amber);
+        color: var(--asphalt);
+        font-weight: 600;
+    }
 
-.app-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.app-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
 
 .app-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 16px;
-  padding: 16px 32px;
-  border-bottom: 1px solid var(--border);
-  background: var(--card);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
 }
 
-.app-topbar-user { display: flex; align-items: center; gap: 10px; }
-.app-topbar-name { font-weight: 600; font-size: 14px; }
+.app-topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.app-topbar-name {
+    font-weight: 600;
+    font-size: 14px;
+}
 
 .app-role-badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 3px 8px;
-  border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 999px;
 }
 
-.app-role-badge.is-admin { background: #fdf1de; color: var(--amber-dark); }
-.app-role-badge.is-motorista { background: var(--slate-bg); color: var(--slate); }
+    .app-role-badge.is-admin {
+        background: #fdf1de;
+        color: var(--amber-dark);
+    }
 
-.app-content { flex: 1; padding: 32px; max-width: 1200px; width: 100%; }
+    .app-role-badge.is-motorista {
+        background: var(--slate-bg);
+        color: var(--slate);
+    }
 
-@media (max-width: 800px) {
-  .app-shell { flex-direction: column; }
-  .app-sidebar { width: 100%; flex-direction: row; align-items: center; padding: 12px 16px; }
-  .app-brand { border: none; margin: 0; padding: 0; }
-  .app-nav { flex-direction: row; overflow-x: auto; margin-left: 16px; }
-  .app-content { padding: 20px; }
+.app-content {
+    flex: 1;
+    padding: 32px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
 }
 
-/* ---- Generic UI ---- */
-
-.page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-.page-header h1 { font-size: 32px; }
-.page-header p { color: var(--text-muted); margin: 4px 0 0; font-size: 14px; }
-
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-.card + .card { margin-top: 16px; }
-
-.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
-.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
-.stat-card .stat-value { font-family: var(--font-display); font-size: 30px; font-weight: 700; }
-.stat-card .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
-
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-thead th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600; padding: 0 12px 10px; border-bottom: 1px solid var(--border); }
-tbody td { padding: 14px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover { background: rgba(242, 169, 59, 0.06); }
-
-.mono { font-family: var(--font-mono); font-size: 13px; }
-
-.btn { font-weight: 600; font-size: 14px; border-radius: 8px; border: 1px solid transparent; padding: 10px 16px; cursor: pointer; }
-.btn-primary { background: var(--amber); color: var(--asphalt); }
-.btn-primary:hover { filter: brightness(0.95); }
-.btn-ghost { background: transparent; border-color: var(--border); color: var(--text); }
-.btn-ghost:hover { background: var(--slate-bg); }
-.btn-danger { background: var(--signal-red-bg); color: var(--signal-red); }
-.btn-sm { padding: 6px 10px; font-size: 13px; }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-.field { display: flex; flex-direction: column; gap: 6px; }
-.field label { font-size: 13px; font-weight: 600; color: var(--text); }
-.field input, .field select, .field textarea { padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; color: var(--text); }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--amber-dark); }
-.field-hint { font-size: 12px; color: var(--text-muted); }
-.field-error { font-size: 12px; color: var(--signal-red); }
-
-.empty-state { text-align: center; padding: 48px 24px; color: var(--text-muted); }
-.empty-state h3 { color: var(--text); margin-bottom: 6px; }
-
-.section-title { font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px; }
-
-.frete-preview { display: flex; align-items: center; justify-content: space-between; background: var(--slate-bg); border-radius: 8px; padding: 12px 16px; }
-.frete-preview-value { font-size: 20px; font-weight: 700; color: var(--amber-dark); }
-
-/* ---- Status badge ---- */
-.status-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
-.status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.status-pendente { background: #fdf1de; color: var(--amber-dark); }
-.status-coletada { background: var(--slate-bg); color: var(--slate); }
-.status-entregue { background: var(--cargo-green-bg); color: var(--cargo-green); }
-.status-cancelada { background: var(--signal-red-bg); color: var(--signal-red); }
-
-/* ---- Route line (coleta -> destino) ---- */
-.route-line { display: flex; flex-direction: column; gap: 4px; min-width: 180px; }
-.route-line-track { display: flex; align-items: center; gap: 4px; }
-.route-line-point { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--asphalt); }
-.route-line-point-end { background: var(--cargo-green); }
-.route-line-dashes { position: relative; flex: 1; height: 2px; background-image: linear-gradient(to right, var(--border) 0 6px, transparent 6px 10px); background-size: 10px 2px; background-repeat: repeat-x; }
-.route-line-fill { position: absolute; top: 0; left: 0; height: 2px; background: var(--amber-dark); }
-.route-line-cancelada .route-line-dashes { background-image: linear-gradient(to right, var(--signal-red-bg) 0 6px, transparent 6px 10px); }
-.route-line-cancelada .route-line-point { background: var(--signal-red); }
-.route-line-labels { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--text-muted); }
-.route-line-labels span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; }
-
-/* ---- Login page ---- */
-.login-page { min-height: 100vh; display: grid; grid-template-columns: 1.1fr 1fr; }
-.login-visual { background: var(--asphalt); color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 64px; }
-.login-visual-mark { font-family: var(--font-display); font-weight: 700; font-size: 22px; background: var(--amber); color: var(--asphalt); width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; }
-.login-visual h1 { font-size: 56px; margin-bottom: 12px; }
-.login-visual p { color: rgba(255, 255, 255, 0.65); font-size: 16px; max-width: 380px; margin: 0 0 48px; }
-.login-route { display: flex; align-items: center; gap: 4px; max-width: 420px; }
-.login-route-point { width: 12px; height: 12px; border-radius: 50%; background: var(--amber); flex-shrink: 0; }
-.login-route-point-end { background: var(--cargo-green); }
-.login-route-line { flex: 1; height: 2px; background-image: linear-gradient(to right, rgba(255, 255, 255, 0.35) 0 8px, transparent 8px 14px); background-size: 14px 2px; }
-.login-form-wrap { display: flex; align-items: center; justify-content: center; padding: 32px; }
-.login-form { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 16px; }
-.login-form h2 { font-size: 26px; }
-.login-demo { margin-top: 8px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
-.login-demo span { font-size: 12px; color: var(--text-muted); }
-.login-demo-buttons { display: flex; gap: 8px; }
-
-@media (max-width: 860px) {
-  .login-page { grid-template-columns: 1fr; }
-  .login-visual { padding: 40px 32px; }
-  .login-visual h1 { font-size: 40px; }
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
 }
 
-/* ---- Motorista cards ---- */
-.motorista-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
-.motorista-card { display: flex; flex-direction: column; gap: 12px; }
-.motorista-card-header { display: flex; align-items: center; justify-content: space-between; }
-.motorista-card-meta { display: flex; gap: 14px; font-size: 13px; color: var(--text-muted); }
-.motorista-entrega-form { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
+    .page-header h1 {
+        font-size: 32px;
+    }
 
-.cancel-inline { display: flex; align-items: center; gap: 6px; }
-.cancel-inline-input { padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 13px; width: 160px; }
+    .page-header p {
+        color: var(--text-muted);
+        margin: 4px 0 0;
+        font-size: 14px;
+    }
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.card-table-wrapper {
+    padding: 0;
+    overflow: hidden;
+}
+
+.card + .card {
+    margin-top: 16px;
+}
+
+.stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+}
+
+    .stat-card .stat-value {
+        font-family: var(--font-display);
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .stat-card .stat-label {
+        font-size: 12px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+thead th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: rgba(242, 169, 59, 0.06);
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mobile-label {
+    display: none;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.mono {
+    font-family: var(--font-mono);
+    font-size: 13px;
+}
+
+.btn {
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 10px 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--amber);
+    color: var(--asphalt);
+}
+
+    .btn-primary:hover {
+        filter: brightness(0.95);
+    }
+
+.btn-ghost {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+    .btn-ghost:hover {
+        background: var(--slate-bg);
+    }
+
+.btn-danger {
+    background: var(--signal-red-bg);
+    color: var(--signal-red);
+}
+
+.btn-sm {
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+    .field label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .field input, .field select, .field textarea {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--text);
+    }
+
+        .field input:focus, .field select:focus, .field textarea:focus {
+            border-color: var(--amber-dark);
+        }
+
+.field-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.field-error {
+    font-size: 12px;
+    color: var(--signal-red);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-muted);
+}
+
+    .empty-state h3 {
+        color: var(--text);
+        margin-bottom: 6px;
+    }
+
+.section-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.frete-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--slate-bg);
+    border-radius: 8px;
+    padding: 12px 16px;
+}
+
+.frete-preview-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--amber-dark);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+    .status-badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+.status-pendente {
+    background: #fdf1de;
+    color: var(--amber-dark);
+}
+
+.status-coletada {
+    background: var(--slate-bg);
+    color: var(--slate);
+}
+
+.status-entregue {
+    background: var(--cargo-green-bg);
+    color: var(--cargo-green);
+}
+
+.status-cancelada {
+    background: var(--signal-red-bg);
+    color: var(--signal-red);
+}
+
+.route-line {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 180px;
+}
+
+.route-line-track {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.route-line-point {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--asphalt);
+}
+
+.route-line-point-end {
+    background: var(--cargo-green);
+}
+
+.route-line-dashes {
+    position: relative;
+    flex: 1;
+    height: 2px;
+    background-image: linear-gradient(to right, var(--border) 0 6px, transparent 6px 10px);
+    background-size: 10px 2px;
+    background-repeat: repeat-x;
+}
+
+.route-line-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: var(--amber-dark);
+}
+
+.route-line-cancelada .route-line-dashes {
+    background-image: linear-gradient(to right, var(--signal-red-bg) 0 6px, transparent 6px 10px);
+}
+
+.route-line-cancelada .route-line-point {
+    background: var(--signal-red);
+}
+
+.route-line-labels {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+    .route-line-labels span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 140px;
+    }
+
+.cancel-inline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.cancel-inline-input {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    min-width: 140px;
+    flex: 1;
+}
+
+.cancel-inline-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+}
+
+.login-visual {
+    background: var(--asphalt);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px;
+}
+
+.login-visual-mark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    background: var(--amber);
+    color: var(--asphalt);
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.login-visual h1 {
+    font-size: 56px;
+    margin-bottom: 12px;
+}
+
+.login-visual p {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 16px;
+    max-width: 380px;
+    margin: 0 0 48px;
+}
+
+.login-route {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 420px;
+}
+
+.login-route-point {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--amber);
+    flex-shrink: 0;
+}
+
+.login-route-point-end {
+    background: var(--cargo-green);
+}
+
+.login-route-line {
+    flex: 1;
+    height: 2px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.35) 0 8px, transparent 8px 14px);
+    background-size: 14px 2px;
+}
+
+.login-form-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+    .login-form h2 {
+        font-size: 26px;
+    }
+
+.login-demo {
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+    .login-demo span {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+.login-demo-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.motorista-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+.motorista-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.motorista-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.motorista-card-meta {
+    display: flex;
+    gap: 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.motorista-entrega-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+}
+
+@media (max-width: 900px) {
+    .app-shell {
+        flex-direction: column;
+    }
+
+    .app-sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 20px;
+    }
+
+    .app-brand {
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .app-brand span {
+            display: none;
+        }
+
+    .app-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        margin-left: 16px;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .app-topbar {
+        padding: 12px 20px;
+    }
+
+    .app-content {
+        padding: 20px 16px;
+    }
+
+    .login-page {
+        grid-template-columns: 1fr;
+    }
+
+    .login-visual {
+        padding: 40px 24px;
+    }
+
+        .login-visual h1 {
+            font-size: 38px;
+        }
+}
+
+@media (max-width: 640px) {
+    .page-header h1 {
+        font-size: 24px;
+    }
+
+    .stat-row {
+        grid-template-columns: 1fr;
+    }
+
+    .card-table-wrapper {
+        background: transparent;
+        border: none;
+    }
+
+    .responsive-table thead {
+        display: none;
+    }
+
+    .responsive-table,
+    .responsive-table tbody,
+    .responsive-table tr,
+    .responsive-table td {
+        display: block;
+        width: 100%;
+    }
+
+        .responsive-table tr {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .responsive-table td {
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--slate-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .responsive-table td:last-child {
+                border-bottom: none;
+                padding-top: 12px;
+            }
+
+    .mobile-label {
+        display: inline-block;
+    }
+
+    .actions-cell {
+        justify-content: flex-end;
+    }
+
+    .cancel-inline {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cancel-inline-input {
+        width: 100%;
+    }
+
+    .cancel-inline-buttons {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .route-line {
+        width: 100%;
+    }
+}
+
+.field-actions {
+    justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+    .field-actions {
+        justify-content: stretch;
+        margin-top: 8px;
+    }
+
+        .field-actions .btn {
+            width: 100%;
+        }
+}
+
+.field-observacoes {
+  grid-column: 1 / -1;
+  max-width: 600px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .field-observacoes {
+    max-width: 100%;
+  }
+}
