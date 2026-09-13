@@ -34,7 +34,7 @@
                 <option value="Administrador">Administrador</option>
             </select>
         </div>
-        <div class="field" style="justify-content:flex-end">
+        <div class="field field-actions">
             <button class="btn btn-primary" type="submit">Cadastrar usuário</button>
         </div>
     </form>
@@ -44,39 +44,49 @@
     }
 </div>
 
-<div class="card" style="padding:0">
-    <table>
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Usuário</th>
-                <th>E-mail</th>
-                <th>Cargo</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var u in Model.Store.Usuarios)
-            {
+<div class="card card-table-wrapper">
+    <div class="table-responsive">
+        <table class="responsive-table">
+            <thead>
                 <tr>
-                    <td>@u.NomeDaPessoa</td>
-                    <td class="mono">@u.NomeDeUsuario</td>
-                    <td>@u.Email</td>
-                    <td>@u.Cargo</td>
-                    <td>
-                        <span class="status-badge @(u.Ativo ? "status-entregue" : "status-cancelada")">
-                            @(u.Ativo ? "Ativo" : "Desativado")
-                        </span>
-                    </td>
-                    <td>
-                        <form method="post" asp-page-handler="Toggle">
-                            <input type="hidden" name="id" value="@u.Id" />
-                            <button class="btn btn-ghost btn-sm" type="submit">@(u.Ativo ? "Desativar" : "Reativar")</button>
-                        </form>
-                    </td>
+                    <th>Nome</th>
+                    <th>Usuário</th>
+                    <th>E-mail</th>
+                    <th>Cargo</th>
+                    <th>Status</th>
+                    <th class="text-right">Ações</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var u in Model.Store.Usuarios)
+                {
+                    <tr>
+                        <td data-label="Nome">
+                            <strong>@u.NomeDaPessoa</strong>
+                        </td>
+                        <td data-label="Usuário" class="mono">
+                            <span class="mobile-label">Usuário: </span>@u.NomeDeUsuario
+                        </td>
+                        <td data-label="E-mail">
+                            <span class="mobile-label">E-mail: </span>@u.Email
+                        </td>
+                        <td data-label="Cargo">
+                            <span class="mobile-label">Cargo: </span>@u.Cargo
+                        </td>
+                        <td data-label="Status">
+                            <span class="status-badge @(u.Ativo ? "status-entregue" : "status-cancelada")">
+                                @(u.Ativo ? "Ativo" : "Desativado")
+                            </span>
+                        </td>
+                        <td data-label="Ações" class="actions-cell">
+                            <form method="post" asp-page-handler="Toggle">
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button class="btn btn-ghost btn-sm" type="submit">@(u.Ativo ? "Desativar" : "Reativar")</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
