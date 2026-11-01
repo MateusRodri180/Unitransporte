@@ -57,4 +57,17 @@ public class VeiculosModel : SecurePageModel
         Store.AddVeiculo(Modelo.Trim(), Placa.Trim().ToUpper(), Cor.Trim(), Marca.Trim());
         return RedirectToPage("/Veiculos");
     }
+
+    public IActionResult OnPostRemover(string id)
+    {
+        var guard = RequireLogin(Cargo.Administrador);
+        if (guard is not null) return guard;
+
+        var veiculo = Store.Veiculos.FirstOrDefault(v => v.Id == id);
+        if (veiculo is not null)
+        {
+            Store.Veiculos.Remove(veiculo);
+        }
+        return RedirectToPage("/Veiculos");
+    }
 }

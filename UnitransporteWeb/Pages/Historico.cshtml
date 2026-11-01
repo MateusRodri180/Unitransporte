@@ -5,62 +5,76 @@
     ViewData["Title"] = "Histórico";
 }
 
-<div class="page-header">
-    <div>
-        <h1>Histórico de movimentações</h1>
-        <p>Entregas concluídas e cancelamentos já registrados no sistema.</p>
+<div class="relacao-wrapper">
+    <div class="historico-top-bar">
+        <div class="relacao-header-banner historico-banner">
+            <h2>Histórico</h2>
+        </div>
+        <div class="historico-actions-group">
+            <a href="/Relatorios" class="btn btn-relatorio">Relatório</a>
+            <button type="button" class="btn-filter-icon" aria-label="Filtrar">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                </svg>
+            </button>
+        </div>
     </div>
-</div>
 
-@if (Model.Concluidas.Count == 0)
-{
-    <div class="card empty-state">
-        <h3>Nada por aqui ainda</h3>
-        <p>Assim que uma encomenda for entregue ou cancelada, ela aparece neste histórico.</p>
-    </div>
-}
-else
-{
-    <div class="card card-table-wrapper">
+    <div class="card card-table-wrapper dark-table-container">
         <div class="table-responsive">
-            <table class="responsive-table">
+            <table class="responsive-table custom-admin-table historico-table">
                 <thead>
                     <tr>
-                        <th>Cliente</th>
-                        <th>Trajeto</th>
+                        <th>Motorista</th>
+                        <th>Coleta</th>
+                        <th>Entrega</th>
+                        <th>Valor</th>
                         <th>Status</th>
-                        <th>Minuta</th>
+                        <th>Tipo</th>
                         <th>Data</th>
+                        <th>Minuta</th>
+                        <th class="text-right"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var e in Model.Concluidas)
+                    @if (Model.HistoricoList.Count == 0)
                     {
-                        var minuta = Model.MinutaDe(e.Id);
                         <tr>
-                            <td data-label="Cliente">
-                                <strong>@e.ClienteNome</strong>
-                                @if (!string.IsNullOrEmpty(e.MotivoCancelamento))
-                                {
-                                    <div class="field-hint">@e.MotivoCancelamento</div>
-                                }
-                            </td>
-                            <td data-label="Trajeto">
-                                @e.PontoDeColeta → @e.PontoDeDestino
-                            </td>
-                            <td data-label="Status">
-                                @await Html.PartialAsync("_StatusBadge", e.StatusDaEntrega)
-                            </td>
-                            <td data-label="Minuta" class="mono">
-                                <span class="mobile-label">Minuta: </span>@(minuta is not null ? $"#{minuta.NumeroDaMinuta}" : "—")
-                            </td>
-                            <td data-label="Data" class="field-hint">
-                                <span class="mobile-label">Data: </span>@((minuta?.Data ?? e.CriadaEm).ToString("dd/MM/yyyy"))
+                            <td>Motorista 1</td>
+                            <td>Rua 2, 82, Bairro 2, Cidade 2</td>
+                            <td>Rua 1, 25, Bairro 1, Cidade 1</td>
+                            <td class="mono">R$50,55</td>
+                            <td>Pendente</td>
+                            <td>Coleta e Entrega</td>
+                            <td>28/09/2026</td>
+                            <td class="mono">#1234</td>
+                            <td class="text-right">
+                                <button type="button" class="btn-icon-action">🖨️</button>
                             </td>
                         </tr>
+                    }
+                    else
+                    {
+                        @foreach (var e in Model.HistoricoList)
+                        {
+                            var minuta = Model.MinutaDe(e.Id);
+                            <tr>
+                                <td data-label="Motorista">@Model.NomeMotorista(e.MotoristaId)</td>
+                                <td data-label="Coleta">@e.PontoDeColeta</td>
+                                <td data-label="Entrega">@e.PontoDeDestino</td>
+                                <td data-label="Valor" class="mono">R$ @e.ValorDoFrete.ToString("0.00")</td>
+                                <td data-label="Status">@e.StatusDaEntrega</td>
+                                <td data-label="Tipo">Coleta e Entrega</td>
+                                <td data-label="Data">@e.CriadaEm.ToString("dd/MM/yyyy")</td>
+                                <td data-label="Minuta" class="mono">@(minuta is not null ? $"#{minuta.NumeroDaMinuta}" : "#1234")</td>
+                                <td data-label="Ações" class="text-right">
+                                    <button type="button" class="btn-icon-action" title="Imprimir minuta">🖨️</button>
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
         </div>
     </div>
-}
+</div>

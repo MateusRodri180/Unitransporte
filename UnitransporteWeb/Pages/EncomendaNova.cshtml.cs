@@ -37,6 +37,15 @@ public class EncomendaNovaModel : SecurePageModel
     [BindProperty]
     public string Observacoes { get; set; } = "";
 
+    [BindProperty]
+    public string Valor { get; set; } = "";
+
+    [BindProperty]
+    public string NotaFiscal { get; set; } = "";
+
+    [BindProperty]
+    public string TipoDaCorrida { get; set; } = "Coleta e Entrega";
+
     public string? Erro { get; set; }
     public bool Sucesso { get; set; }
 
@@ -70,7 +79,8 @@ public class EncomendaNovaModel : SecurePageModel
             return Page();
         }
 
-        var frete = Store.CalcularFrete(pesoValor, Dimensoes ?? "");
+        var freteInputOk = decimal.TryParse((Valor ?? "").Replace("R$", "").Trim().Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var valorFreteManual);
+        var frete = freteInputOk && valorFreteManual > 0 ? valorFreteManual : Store.CalcularFrete(pesoValor, Dimensoes ?? "");
 
         Store.AddEncomenda(new Encomenda
         {
@@ -87,13 +97,12 @@ public class EncomendaNovaModel : SecurePageModel
         });
 
         Sucesso = true;
-        ClienteNome = ClienteTelefone = PontoDeColeta = PontoDeDestino = Dimensoes = Peso = Observacoes = "";
+        ClienteNome = ClienteTelefone = PontoDeColeta = PontoDeDestino = Dimensoes = Peso = Observacoes = Valor = NotaFiscal = "";
         MotoristaId = VeiculoId = null;
 
         return Page();
     }
 
-    /// <summary>Endpoint chamado via fetch pelo JS para recalcular o frete em tempo real.</summary>
     public IActionResult OnGetCalcularFrete(string peso, string dimensoes)
     {
         var guard = RequireLogin(Cargo.Administrador);

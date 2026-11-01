@@ -6,13 +6,9 @@
 }
 <div class="app-shell">
     <aside class="app-sidebar">
-        <a class="app-brand" href="/">
-            <span class="app-brand-mark">UT</span>
-            <div>
-                <strong>Unitransporte</strong>
-                <span>Gestão logística</span>
-            </div>
-        </a>
+        <div class="app-brand">
+            <div class="branch-tag">UNITRANS</div>
+        </div>
         <nav class="app-nav">
             @if (isAdmin)
             {
@@ -30,16 +26,20 @@
     </aside>
     <div class="app-main">
         <header class="app-topbar">
-            <div class="app-topbar-user">
+            @* <div class="app-topbar-user">
                 <span class="app-topbar-name">@usuario?.NomeDaPessoa</span>
                 <span class="app-role-badge @(isAdmin ? "is-admin" : "is-motorista")">@usuario?.Cargo</span>
+            </div> *@
+            <div class="user-avatar-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                </svg>
             </div>
-            <form method="post" asp-page="/Login" asp-page-handler="Logout">
-                <button class="btn btn-ghost" type="submit">Sair</button>
-            </form>
         </header>
         <main class="app-content">
-            @RenderBody()
+            <div class="content-container-box">
+                @RenderBody()
+            </div>
         </main>
     </div>
 </div>

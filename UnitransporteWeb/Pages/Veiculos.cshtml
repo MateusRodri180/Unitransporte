@@ -5,60 +5,86 @@
     ViewData["Title"] = "Veículos";
 }
 
-<div class="page-header">
-    <div>
-        <h1>Veículos</h1>
-        <p>Frota cadastrada para coletas e entregas.</p>
+<div class="relacao-wrapper">
+    <div class="relacao-header-banner">
+        <h2>VEÍCULOS</h2>
     </div>
-</div>
 
-<div class="card">
-    <h3 class="section-title">Novo veículo</h3>
-    <form method="post" class="form-grid">
-        <div class="field">
-            <label for="marca">Marca</label>
-            <input id="marca" name="Marca" value="@Model.Marca" placeholder="ex: Fiat" />
-        </div>
-        <div class="field">
-            <label for="modelo">Modelo</label>
-            <input id="modelo" name="Modelo" value="@Model.Modelo" placeholder="ex: Fiorino" />
-        </div>
-        <div class="field">
-            <label for="placa">Placa</label>
-            <input id="placa" name="Placa" value="@Model.Placa" placeholder="ex: ABC-1D23" />
-        </div>
-        <div class="field">
-            <label for="cor">Cor</label>
-            <input id="cor" name="Cor" value="@Model.Cor" placeholder="ex: Branco" />
-        </div>
-        <div class="field" style="justify-content:flex-end">
-            <button class="btn btn-primary" type="submit">Cadastrar veículo</button>
-        </div>
-    </form>
-    @if (!string.IsNullOrEmpty(Model.Erro))
-    {
-        <p class="field-error" style="margin-top:10px">@Model.Erro</p>
-    }
-</div>
+    <div class="content-container-box" style="margin-bottom: 24px;">
+        <form method="post" class="form-grid-4">
+            <div class="field">
+                <label for="marca">Marca:</label>
+                <input id="marca" name="Marca" value="@Model.Marca" />
+            </div>
+            <div class="field">
+                <label for="modelo">Modelo:</label>
+                <input id="modelo" name="Modelo" value="@Model.Modelo" />
+            </div>
+            <div class="field">
+                <label for="placa">Placa:</label>
+                <input id="placa" name="Placa" value="@Model.Placa" />
+            </div>
+            <div class="field">
+                <label for="cor">Cor:</label>
+                <input id="cor" name="Cor" value="@Model.Cor" />
+            </div>
 
-<div class="card" style="padding:0">
-    <table>
-        <thead>
-            <tr>
-                <th>Marca / Modelo</th>
-                <th>Placa</th>
-                <th>Cor</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var v in Model.Store.Veiculos)
+            @if (!string.IsNullOrEmpty(Model.Erro))
             {
-                <tr>
-                    <td>@v.Marca @v.Modelo</td>
-                    <td class="mono">@v.Placa</td>
-                    <td>@v.Cor</td>
-                </tr>
+                <p class="field-error" style="grid-column: 1 / -1;">@Model.Erro</p>
             }
-        </tbody>
-    </table>
+
+            <div style="grid-column: 1 / -1; display: flex; justify-content: center; margin-top: 10px;">
+                <button class="btn btn-cadastrar-encomenda" type="submit" style="width: auto; padding: 0 32px;">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card card-table-wrapper dark-table-container">
+        <div class="table-responsive">
+            <table class="responsive-table custom-admin-table veiculos-table">
+                <thead>
+                    <tr>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Placa</th>
+                        <th>Cor</th>
+                        <th class="text-right"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Store.Veiculos.Count == 0)
+                    {
+                        <tr>
+                            <td>Marca 1</td>
+                            <td>Modelo 1</td>
+                            <td class="mono">78V-1SEV</td>
+                            <td>Preto</td>
+                            <td class="text-right">
+                                <button type="button" class="btn btn-danger btn-sm">Desativar</button>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var v in Model.Store.Veiculos)
+                        {
+                            <tr>
+                                <td data-label="Marca"><strong>@v.Marca</strong></td>
+                                <td data-label="Modelo">@v.Modelo</td>
+                                <td data-label="Placa" class="mono">@v.Placa</td>
+                                <td data-label="Cor">@v.Cor</td>
+                                <td data-label="Ações" class="text-right">
+                                    <form method="post" asp-page-handler="Remover" style="display:inline;">
+                                        <input type="hidden" name="id" value="@v.Id" />
+                                        <button class="btn btn-danger btn-sm" type="submit">Desativar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

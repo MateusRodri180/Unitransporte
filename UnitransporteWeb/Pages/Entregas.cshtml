@@ -5,91 +5,88 @@
     ViewData["Title"] = "Entregas e coletas";
 }
 
-<div class="page-header">
-    <div>
-        <h1>Entregas e coletas pendentes</h1>
-        <p>Acompanhe tudo o que ainda está em aberto na operação.</p>
+<div class="relacao-wrapper">
+    <div class="relacao-header-banner">
+        <h2>Relação de entregas e coletas</h2>
     </div>
-</div>
 
-<div class="stat-row">
-    <div class="stat-card">
-        <div class="stat-value">@Model.AguardandoColeta</div>
-        <div class="stat-label">Aguardando coleta</div>
+    <div class="stat-tabs-row">
+        <div class="stat-tab-card active-tab">
+            <span class="tab-label">Pendentes</span>
+            <span class="tab-badge">@Model.PendentesCount</span>
+        </div>
+        <div class="stat-tab-card">
+            <span class="tab-label">Coletados</span>
+            <span class="tab-badge">@Model.ColetadosCount</span>
+        </div>
+        <div class="stat-tab-card">
+            <span class="tab-label">Concluídos</span>
+            <span class="tab-badge">@Model.ConcluidosCount</span>
+        </div>
     </div>
-    <div class="stat-card">
-        <div class="stat-value">@Model.ACaminho</div>
-        <div class="stat-label">A caminho da entrega</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-value">@Model.MotoristasAtivos</div>
-        <div class="stat-label">Motoristas ativos</div>
-    </div>
-</div>
 
-@if (Model.Pendentes.Count == 0)
-{
-    <div class="card empty-state">
-        <h3>Nenhuma pendência agora</h3>
-        <p>Todas as encomendas cadastradas já foram entregues ou canceladas.</p>
-    </div>
-}
-else
-{
-    <div class="card card-table-wrapper">
+    <div class="card card-table-wrapper dark-table-container">
         <div class="table-responsive">
-            <table class="responsive-table">
+            <table class="responsive-table custom-admin-table">
                 <thead>
                     <tr>
+                        <th class="checkbox-col"><input type="checkbox" /></th>
                         <th>Cliente</th>
-                        <th>Trajeto</th>
                         <th>Motorista</th>
-                        <th>Frete</th>
-                        <th>Status</th>
-                        <th class="text-right">Ações</th>
+                        <th>Endereço</th>
+                        <th>Tipo</th>
+                        <th class="text-right"><span class="header-cancel-btn">Cancelar</span></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var e in Model.Pendentes)
+                    @if (Model.Pendentes.Count == 0)
                     {
                         <tr>
-                            <td data-label="Cliente">
-                                <strong>@e.ClienteNome</strong>
-                                <div class="field-hint">@e.ClienteTelefone</div>
-                            </td>
-                            <td data-label="Trajeto">
-                                @await Html.PartialAsync("_RouteLine", new UnitransporteWeb.Models.RouteLineViewModel(e.PontoDeColeta, e.PontoDeDestino, e.StatusDaEntrega))
-                            </td>
-                            <td data-label="Motorista">
-                                <span class="mobile-label">Motorista: </span>@Model.NomeMotorista(e.MotoristaId)
-                            </td>
-                            <td data-label="Frete" class="mono">
-                                <span class="mobile-label">Frete: </span>R$ @e.ValorDoFrete.ToString("0.00")
-                            </td>
-                            <td data-label="Status">
-                                @await Html.PartialAsync("_StatusBadge", e.StatusDaEntrega)
-                            </td>
-                            <td data-label="Ações" class="actions-cell">
-                                @if (Model.CancelandoId == e.Id)
-                                {
-                                    <form method="post" asp-page-handler="Cancelar" class="cancel-inline">
-                                        <input type="hidden" name="CancelarId" value="@e.Id" />
-                                        <input class="cancel-inline-input" name="Motivo" placeholder="Motivo do cancelamento" required />
-                                        <div class="cancel-inline-buttons">
-                                            <button class="btn btn-danger btn-sm" type="submit">Confirmar</button>
-                                            <a class="btn btn-ghost btn-sm" href="/Entregas">Voltar</a>
-                                        </div>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-ghost btn-sm btn-cancel-trigger" href="/Entregas?handler=Cancelar&id=@e.Id">Cancelar</a>
-                                }
-                            </td>
+                            <td><input type="checkbox" /></td>
+                            <td>Cliente 1</td>
+                            <td>Motorista 1</td>
+                            <td>Rua 1, 25, Bairro 1, Cidade 1</td>
+                            <td>Coleta e Entrega</td>
+                            <td class="text-right mono">R$ 50,55</td>
                         </tr>
+                    }
+                    else
+                    {
+                        @foreach (var e in Model.Pendentes)
+                        {
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td data-label="Cliente">
+                                    <strong>@e.ClienteNome</strong>
+                                </td>
+                                <td data-label="Motorista">
+                                    @Model.NomeMotorista(e.MotoristaId)
+                                </td>
+                                <td data-label="Endereço">
+                                    @e.PontoDeColeta
+                                </td>
+                                <td data-label="Tipo">
+                                    Coleta e Entrega
+                                </td>
+                                <td data-label="Ações" class="text-right actions-cell">
+                                    @if (Model.CancelandoId == e.Id)
+                                    {
+                                        <form method="post" asp-page-handler="Cancelar" class="cancel-inline">
+                                            <input type="hidden" name="CancelarId" value="@e.Id" />
+                                            <input class="cancel-inline-input" name="Motivo" placeholder="Motivo" required />
+                                            <button class="btn btn-danger btn-sm" type="submit">OK</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="mono">R$ @e.ValorDoFrete.ToString("0.00")</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
         </div>
     </div>
-}
+</div>

@@ -11,9 +11,9 @@ public class EntregasModel : SecurePageModel
     }
 
     public List<Encomenda> Pendentes { get; set; } = new();
-    public int AguardandoColeta { get; set; }
-    public int ACaminho { get; set; }
-    public int MotoristasAtivos { get; set; }
+    public int PendentesCount { get; set; }
+    public int ColetadosCount { get; set; }
+    public int ConcluidosCount { get; set; }
 
     [BindProperty]
     public string CancelarId { get; set; } = "";
@@ -59,7 +59,7 @@ public class EntregasModel : SecurePageModel
         return RedirectToPage("/Entregas");
     }
 
-    public string NomeMotorista(string? id) => Store.Usuarios.FirstOrDefault(u => u.Id == id)?.NomeDaPessoa ?? "—";
+    public string NomeMotorista(string? id) => Store.Usuarios.FirstOrDefault(u => u.Id == id)?.NomeDaPessoa ?? "Motorista 1";
 
     private void Carregar()
     {
@@ -67,8 +67,8 @@ public class EntregasModel : SecurePageModel
             .Where(e => e.StatusDaEntrega == StatusEncomenda.Pendente || e.StatusDaEntrega == StatusEncomenda.Coletada)
             .ToList();
 
-        AguardandoColeta = Store.Encomendas.Count(e => e.StatusDaEntrega == StatusEncomenda.Pendente);
-        ACaminho = Store.Encomendas.Count(e => e.StatusDaEntrega == StatusEncomenda.Coletada);
-        MotoristasAtivos = Store.Usuarios.Count(u => u.Cargo == Cargo.Motorista && u.Ativo);
+        PendentesCount = Store.Encomendas.Count(e => e.StatusDaEntrega == StatusEncomenda.Pendente);
+        ColetadosCount = Store.Encomendas.Count(e => e.StatusDaEntrega == StatusEncomenda.Coletada);
+        ConcluidosCount = Store.Encomendas.Count(e => e.StatusDaEntrega == StatusEncomenda.Entregue);
     }
 }
