@@ -5,49 +5,124 @@
     ViewData["Title"] = "Entrar";
 }
 
-<div class="login-page">
-    <div class="login-visual">
-        <div class="login-visual-mark">UT</div>
-        <h1>Unitransporte</h1>
-        <p>Coleta e entrega rápida entre Votuporanga e região.</p>
-        <div class="login-route">
-            <span class="login-route-point"></span>
-            <span class="login-route-line"></span>
-            <span class="login-route-point login-route-point-end"></span>
+<section class="new-section">
+    <header>
+        <img src="~/images/logo.png" alt="Logo">
+        <h1>Unitrans</h1>
+    </header>
+    <main>
+        <div class="login-container">
+            <h2>LOGIN</h2>
+            <form class="login-form" method="post">
+                <div class="field">
+                    <label for="usuario">Usuário</label>
+                    <input id="usuario" name="NomeDeUsuario" value="@Model.NomeDeUsuario" placeholder="ex: ezequias" autocomplete="username" />
+                </div>
+
+                <div class="field">
+                    <label for="senha">Senha</label>
+                    <input id="senha" name="Senha" type="password" placeholder="••••••••" autocomplete="current-password" />
+                </div>
+
+                <div class="remember-container">
+                    <input / id="remember" name="remember" type="checkbox">
+                    <label for="remember">Lembrar</label>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Erro))
+                {
+                    <p class="field-error">@Model.Erro</p>
+                }
+
+                <button class="btn btn-primary" type="submit">Entrar</button>
+
+                @* <div class="login-demo">
+                    <span>Acesso de demonstração (qualquer senha):</span>
+                    <div class="login-demo-buttons">
+                        <button type="button" class="btn btn-ghost btn-sm" onclick="preencher('ezequias')">Administrador</button>
+                        <button type="button" class="btn btn-ghost btn-sm" onclick="preencher('carlos.a')">Motorista</button>
+                    </div>
+                </div> *@
+            </form>
         </div>
-    </div>
-    <div class="login-form-wrap">
-        <form class="login-form" method="post">
-            <h2>Entrar no sistema</h2>
-            <p class="field-hint">Use seu usuário e senha cadastrados pelo administrador.</p>
+    </main>
+    <footer></footer>
+</section>
 
-            <div class="field">
-                <label for="usuario">Usuário</label>
-                <input id="usuario" name="NomeDeUsuario" value="@Model.NomeDeUsuario" placeholder="ex: ezequias" autocomplete="username" />
-            </div>
+<style>
 
-            <div class="field">
-                <label for="senha">Senha</label>
-                <input id="senha" name="Senha" type="password" placeholder="••••••••" autocomplete="current-password" />
-            </div>
+    section {
+        height: 100vh;
+    }
 
-            @if (!string.IsNullOrEmpty(Model.Erro))
-            {
-                <p class="field-error">@Model.Erro</p>
+        header, footer {
+            height: 10%;
+            background-color: var(--primary-gray);
+            color: var(--orange);
+            display: flex;
+            align-items: center;
+        }
+
+            header h1 {
+                font-size: 4rem;
             }
 
-            <button class="btn btn-primary" type="submit">Entrar</button>
+            header img {
+                width: 5rem;
+                margin: 0 1rem;
+            }
 
-            <div class="login-demo">
-                <span>Acesso de demonstração (qualquer senha):</span>
-                <div class="login-demo-buttons">
-                    <button type="button" class="btn btn-ghost btn-sm" onclick="preencher('ezequias')">Administrador</button>
-                    <button type="button" class="btn btn-ghost btn-sm" onclick="preencher('carlos.a')">Motorista</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+        main {
+            height: 80%;
+            background-color: var(--beige);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .login-container {
+                background-color: var(--primary-gray);
+                width: 30%;
+                height: 80%;
+                border-radius: 3rem;
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+                justify-content: center;
+                gap: 3rem;
+            }
+
+                h2 {
+                    color: var(--orange);
+                    font-size: 5rem;
+                    font-family: 'Inter';
+                }
+
+                .login-form {
+                    width: 70%;
+                }
+
+                    .login-form label {
+                        color: var(--orange);
+                        font-size: 2rem;
+                    }
+                    
+                    .login-form button {
+                        background-color: var(--orange);
+                        height: 3.5rem;
+                    }
+
+                    .remember-container {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.8rem;
+                    }
+
+                    .remember-container label {
+                        font-size: 1rem;
+                    }
+
+</style>
 
 @section Scripts {
     <script>
