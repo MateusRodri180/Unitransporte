@@ -5,88 +5,99 @@
     ViewData["Title"] = "Usuários";
 }
 
-<div class="page-header">
-    <div>
-        <h1>Usuários</h1>
-        <p>Cadastre administradores e motoristas com acesso ao sistema.</p>
+<div class="relacao-wrapper">
+    <div class="relacao-header-banner">
+        <h2>USUÁRIOS</h2>
     </div>
-</div>
 
-<div class="card">
-    <h3 class="section-title">Novo usuário</h3>
-    <form method="post" class="form-grid">
-        <div class="field">
-            <label for="nomeDaPessoa">Nome completo</label>
-            <input id="nomeDaPessoa" name="NomeDaPessoa" value="@Model.NomeDaPessoa" placeholder="ex: João da Silva" />
-        </div>
-        <div class="field">
-            <label for="nomeDeUsuario">Nome de usuário</label>
-            <input id="nomeDeUsuario" name="NomeDeUsuario" value="@Model.NomeDeUsuario" placeholder="ex: joao.s" />
-        </div>
-        <div class="field">
-            <label for="email">E-mail</label>
-            <input id="email" name="Email" type="email" value="@Model.Email" placeholder="joao@unitransporte.com.br" />
-        </div>
-        <div class="field">
-            <label for="cargo">Cargo</label>
-            <select id="cargo" name="Cargo">
-                <option value="Motorista">Motorista</option>
-                <option value="Administrador">Administrador</option>
-            </select>
-        </div>
-        <div class="field field-actions">
-            <button class="btn btn-primary" type="submit">Cadastrar usuário</button>
-        </div>
-    </form>
-    @if (!string.IsNullOrEmpty(Model.Erro))
-    {
-        <p class="field-error" style="margin-top:10px">@Model.Erro</p>
-    }
-</div>
+    <div class="content-container-box" style="margin-bottom: 24px;">
+        <form method="post" class="form-grid-5">
+            <div class="field">
+                <label for="nomeDaPessoa">Nome:</label>
+                <input id="nomeDaPessoa" name="NomeDaPessoa" value="" />
+            </div>
+            <div class="field">
+                <label for="nomeDeUsuario">Usuário:</label>
+                <input id="nomeDeUsuario" name="NomeDeUsuario" value="" />
+            </div>
+            <div class="field">
+                <label for="senha">Senha:</label>
+                <input id="senha" name="Senha" type="password" value="" />
+            </div>
+            <div class="field">
+                <label for="email">Email:</label>
+                <input id="email" name="Email" type="email" value="" />
+            </div>
+            <div class="field">
+                <label for="cargo">Cargo:</label>
+                <select id="cargo" name="Cargo">
+                    <option value="Motorista" selected="">Motorista</option>
+                    <option value="Administrador" selected="">Administração</option>
+                </select>
+            </div>
 
-<div class="card card-table-wrapper">
-    <div class="table-responsive">
-        <table class="responsive-table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Usuário</th>
-                    <th>E-mail</th>
-                    <th>Cargo</th>
-                    <th>Status</th>
-                    <th class="text-right">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var u in Model.Store.Usuarios)
-                {
+            @if (!string.IsNullOrEmpty(Model.Erro))
+            {
+                <p class="field-error" style="grid-column: 1 / -1;">@Model.Erro</p>
+            }
+
+            <div style="grid-column: 1 / -1; display: flex; justify-content: center; margin-top: 10px;">
+                <button class="btn btn-cadastrar-encomenda" type="submit" style="width: auto; padding: 0 32px;">Cadastrar / Alterar</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card card-table-wrapper dark-table-container">
+        <div class="table-responsive">
+            <table class="responsive-table custom-admin-table">
+                <thead>
                     <tr>
-                        <td data-label="Nome">
-                            <strong>@u.NomeDaPessoa</strong>
-                        </td>
-                        <td data-label="Usuário" class="mono">
-                            <span class="mobile-label">Usuário: </span>@u.NomeDeUsuario
-                        </td>
-                        <td data-label="E-mail">
-                            <span class="mobile-label">E-mail: </span>@u.Email
-                        </td>
-                        <td data-label="Cargo">
-                            <span class="mobile-label">Cargo: </span>@u.Cargo
-                        </td>
-                        <td data-label="Status">
-                            <span class="status-badge @(u.Ativo ? "status-entregue" : "status-cancelada")">
-                                @(u.Ativo ? "Ativo" : "Desativado")
-                            </span>
-                        </td>
-                        <td data-label="Ações" class="actions-cell">
-                            <form method="post" asp-page-handler="Toggle">
-                                <input type="hidden" name="id" value="@u.Id" />
-                                <button class="btn btn-ghost btn-sm" type="submit">@(u.Ativo ? "Desativar" : "Reativar")</button>
-                            </form>
-                        </td>
+                        <th>Nome</th>
+                        <th>Usuário</th>
+                        <th>Senha</th>
+                        <th>Email</th>
+                        <th>Cargo</th>
+                        <th>Status</th>
+                        <th class="text-right"></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @if (Model.Store.Usuarios.Count == 0)
+                    {
+                        <tr>
+                            <td>Hugo Quirol Lima</td>
+                            <td class="mono">hugo123</td>
+                            <td class="mono">123456</td>
+                            <td>teste123@gmail.com</td>
+                            <td>Administração</td>
+                            <td>Ativo</td>
+                            <td class="text-right">
+                                <button type="button" class="btn btn-danger btn-sm">Desativar</button>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var u in Model.Store.Usuarios)
+                        {
+                            <tr>
+                                <td data-label="Nome"><strong>@u.NomeDaPessoa</strong></td>
+                                <td data-label="Usuário" class="mono">@u.NomeDeUsuario</td>
+                                <td data-label="Senha" class="mono">••••••</td>
+                                <td data-label="Email">@u.Email</td>
+                                <td data-label="Cargo">Motorista</td>
+                                <td data-label="Status">@(u.Ativo ? "Ativo" : "Desativado")</td>
+                                <td data-label="Ações" class="text-right">
+                                    <form method="post" asp-page-handler="Toggle" style="display:inline;">
+                                        <input type="hidden" name="id" value="@u.Id" />
+                                        <button class="btn btn-danger btn-sm" type="submit">@(u.Ativo ? "Desativar" : "Reativar")</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

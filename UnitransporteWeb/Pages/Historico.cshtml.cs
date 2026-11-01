@@ -10,7 +10,7 @@ public class HistoricoModel : SecurePageModel
     {
     }
 
-    public List<Encomenda> Concluidas { get; set; } = new();
+    public List<Encomenda> HistoricoList { get; set; } = new();
 
     public IActionResult OnGet()
     {
@@ -20,13 +20,14 @@ public class HistoricoModel : SecurePageModel
         ViewData["ActivePage"] = "historico";
         ViewData["CurrentUser"] = CurrentUser;
 
-        Concluidas = Store.Encomendas
-            .Where(e => e.StatusDaEntrega == StatusEncomenda.Entregue || e.StatusDaEntrega == StatusEncomenda.Cancelada)
+        HistoricoList = Store.Encomendas
             .OrderByDescending(e => e.CriadaEm)
             .ToList();
 
         return Page();
     }
+
+    public string NomeMotorista(string? id) => Store.Usuarios.FirstOrDefault(u => u.Id == id)?.NomeDaPessoa ?? "Motorista 1";
 
     public Minuta? MinutaDe(string encomendaId) => Store.Minutas.FirstOrDefault(m => m.EncomendaId == encomendaId);
 }
