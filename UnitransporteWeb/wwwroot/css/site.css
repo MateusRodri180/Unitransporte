@@ -512,3 +512,63 @@ main {
     .remember-container label {
         font-size: 1rem;
     }
+
+/* Por padrão, esconde os cartões mobile em telas grandes e mostra a tabela */
+.motorista-mobile-cards {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    padding: 10px 0;
+}
+
+.motorista-pill-card {
+    background-color: var(--orange);
+    color: var(--primary-gray);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    padding: 16px 20px;
+    border-radius: 9999px;
+    box-shadow: 0 4px 12px rgba(214, 120, 31, 0.3);
+    cursor: pointer;
+    transition: filter 0.2s;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+    .motorista-pill-card:hover {
+        filter: brightness(0.95);
+    }
+
+/* Quando executado em celular ou telas menores (< 768px) */
+@media (max-width: 768px) {
+    .desktop-table-view {
+        display: none !important;
+    }
+
+    .motorista-mobile-cards {
+        display: flex !important;
+    }
+
+    .relacao-header-banner {
+        display: none !important;
+    }
+
+    .app-content {
+        padding: 16px !important;
+    }
+
+    .stat-tabs-row {
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .tab-label {
+        font-size: 16px;
+    }
+
+    .tab-badge {
+        font-size: 13px;
+        padding: 1px 8px;
+    }
+}

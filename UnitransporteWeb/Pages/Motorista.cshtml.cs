@@ -11,65 +11,37 @@ public class MotoristaModel : SecurePageModel
     }
 
     public List<Encomenda> MinhasEncomendas { get; set; } = new();
+    public int PendentesCount { get; set; }
+    public int ColetadosCount { get; set; }
+    public int ConcluidosCount { get; set; }
 
-    [BindProperty]
-    public string EncomendaId { get; set; } = "";
+    [BindProperty(SupportsGet = true)]
+    public string Tab { get; set; } = "pendentes";
 
-    [BindProperty]
-    public string NomeRecebedor { get; set; } = "";
-
-    public string? EntregandoId { get; set; }
-
-    public IActionResult OnGet()
+    public IActionResult OnGet(string? tab)
     {
         var guard = RequireLogin(Cargo.Motorista);
         if (guard is not null) return guard;
 
         ViewData["ActivePage"] = "motorista";
         ViewData["CurrentUser"] = CurrentUser;
-        Carregar();
-        return Page();
-    }
+        Tab = tab ?? "pendentes";
 
-    public IActionResult OnGetEntregar(string id)
-    {
-        var guard = RequireLogin(Cargo.Motorista);
-        if (guard is not null) return guard;
-
-        ViewData["ActivePage"] = "motorista";
-        ViewData["CurrentUser"] = CurrentUser;
-        EntregandoId = id;
-        Carregar();
-        return Page();
-    }
-
-    public IActionResult OnPostColetar(string id)
-    {
-        var guard = RequireLogin(Cargo.Motorista);
-        if (guard is not null) return guard;
-
-        Store.ColetarEncomenda(id);
-        return RedirectToPage("/Motorista");
-    }
-
-    public IActionResult OnPostFinalizarEntrega()
-    {
-        var guard = RequireLogin(Cargo.Motorista);
-        if (guard is not null) return guard;
-
-        if (!string.IsNullOrWhiteSpace(NomeRecebedor))
-        {
-            Store.EntregarEncomenda(EncomendaId, NomeRecebedor.Trim());
-        }
-
-        return RedirectToPage("/Motorista");
-    }
-
-    private void Carregar()
-    {
-        MinhasEncomendas = Store.Encomendas
+        var todas = Store.Encomendas
             .Where(e => e.MotoristaId == CurrentUser!.Id && e.StatusDaEntrega != StatusEncomenda.Cancelada)
-            .OrderBy(e => e.StatusDaEntrega == StatusEncomenda.Coletada ? 0 : 1)
             .ToList();
+
+        PendentesCount = Math.Max(1, todas.Count(e => e.StatusDaEntrega == StatusEncomenda.Pendente));
+        ColetadosCount = todas.Count(e => e.StatusDaEntrega == StatusEncomenda.Coletada);
+        ConcluidosCount = todas.Count(e => e.StatusDaEntrega == StatusEncomenda.Entregue);
+
+        MinhasEncomendas = Tab switch
+        {
+            "coletados" => todas.Where(e => e.StatusDaEntrega == StatusEncomenda.Coletada).ToList(),
+            "concluidos" => todas.Where(e => e.StatusDaEntrega == StatusEncomenda.Entregue).ToList(),
+            _ => todas.Where(e => e.StatusDaEntrega == StatusEncomenda.Pendente).ToList()
+        };
+
+        return Page();
     }
 }
